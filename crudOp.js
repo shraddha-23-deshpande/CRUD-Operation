@@ -91,9 +91,8 @@ router.get('/find/:id', function (req, res) { return __awaiter(void 0, void 0, v
                 Id_1 = _a.sent();
                 emp = fs.readFileSync("employee_data.js");
                 emp = JSON.parse(emp);
-                console.log(emp);
                 employee = emp.filter(function (e) { return e.id == Id_1; });
-                res.send({
+                res.json({
                     response: employee
                 });
                 return [3 /*break*/, 3];
@@ -152,8 +151,7 @@ router.patch('/update/:id', function (req, res) { return __awaiter(void 0, void 
                 stringifyData = JSON.stringify(filtered);
                 fs.writeFileSync("employee_data.js", stringifyData);
                 res.send({
-                    status: 200,
-                    message: "Updated",
+                    message: "employee data successfully Updated",
                     response: filtered
                 });
                 return [3 /*break*/, 3];

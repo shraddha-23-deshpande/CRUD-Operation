@@ -55,7 +55,7 @@ router.get('/find/:id', async(req: Request,res: Response) =>{
 			emp = JSON.parse(emp);
 			//console.log(emp);
 			//find id
-			const employee = emp.filter(e=> e.id == Id )
+			const employee = emp.filter((e: { id: string; })=> e.id == Id )
 		
 			res.json({
 				response: employee,
@@ -74,7 +74,7 @@ router.delete('/delete/:id',async(req: Request,res: Response)=>{
 			data = JSON.parse(data);
 
 			// const filter = data.filter( (user:any) => user.id != req.query.id );
-            var filtered = data.filter(function(item) { 
+            var filtered = data.filter(function(item: { id: string; }) { 
                 return item.id != Id;  
              });
              //console.log(filtered);
@@ -105,7 +105,7 @@ router.patch('/update/:id',async(req: Request,res:Response)=>{
 			emp = JSON.parse(emp);
 
 			//const filtered = emp.filter((user: any) => user.id != Id);
-             var filtered = emp.filter(function(item) { 
+             var filtered = emp.filter(function(item:any ) { 
                 return item.id != Id ;  
              });
 			filtered.push(employee);
