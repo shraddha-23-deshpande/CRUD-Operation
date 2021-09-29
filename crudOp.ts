@@ -1,27 +1,45 @@
 const express = require('express')
 const router=express.Router()
-
 const fs = require("fs");
 import { Request, Response } from "express";
+const emp = require('emp_info');
 
 router.post('/add', async(req : Request,res: Response) =>
 {
     
     try {
         const { id, name, emplevel, mob, email, date_of_join } = req.body;
+        
 
         let emp = fs.readFileSync("employee_data.js");
         emp = JSON.parse(emp);
-        emp.push(req.body);
+
+       // if (req.body.id == null || req.body.name == null || req.body.emplevel == null || req.body.emp.mob == null) {
+           // return res.status(401).send({error: true, msg: 'User data missing'})
+        //}
+        
+    
         //Save data
         const stringifyData = JSON.stringify(emp);
-        fs.writeFileSync("employee_data.js", stringifyData);
+       const userdata = fs.writeFileSync("employee_data.js", stringifyData);
        // console.log(data);
+       //check if the username exist already
+       const findExist = userdata.find( (user: { id: any; }) => user.id === emp.id)
+        if (findExist) {
+            return res.send({
+                error: true, 
+                msg: 'username already exist'
+            })
+        }
+        emp.push(req.body);
 
         res.send("successfully added");
 
     } catch (err) {
-        res.send('Error '+err)
+        res.send({
+            message: "data can not be added",
+            response: err,
+        });
     }
  })
 
@@ -42,7 +60,10 @@ router.post('/add', async(req : Request,res: Response) =>
         res.send(emp);
         } 
     catch (err) {
-        res.send("Error "+err);
+        res.send({
+            message: "Sorry data is not found",
+            response: err,
+        });
     }
 })
 
@@ -64,7 +85,10 @@ router.get('/find/:id', async(req: Request,res: Response) =>{
 		}
 		//console.log(employee)
          catch (err) {
-			res.send("Error: "+err);
+			res.send({
+                message: "No data found",
+                response: err,
+            });
 		}
 })
 router.delete('/delete/:id',async(req: Request,res: Response)=>{
@@ -84,13 +108,17 @@ router.delete('/delete/:id',async(req: Request,res: Response)=>{
 			fs.writeFileSync("employee_data.js", stringifyData);
 
 			res.send({
-					response: filtered
-				});
+                message: "Deleted Successfully",
+                response: filtered,
+            });
 
 
 		}
 		catch (err) {
-			res.send("Error " +err);
+			res.send({
+                message: "can not be deleted",
+                response: err,
+            });
 		}
 
 })
@@ -126,10 +154,14 @@ router.patch('/update/:id',async(req: Request,res:Response)=>{
 			// const result = await data.save();
 		} catch (err) {
 		// console.log(err)
-			res.send("Error "+err);
+			res.send({
+                message: "can not be updated",
+                response: err,
+            });
 		}
     
 })
+
 
 
  module.exports = router
