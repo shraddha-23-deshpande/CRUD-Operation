@@ -40,29 +40,25 @@ var express = require('express');
 var router = express.Router();
 var fs = require("fs");
 router.post('/add', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var employee, emp_1, stringifyData, userdata, findExist;
-    var _a;
+    var _a, id, name_1, emplevel, mob, email, date_of_join, emp, stringifyData;
     return __generator(this, function (_b) {
         try {
-            employee = (_a = req.body, Number = _a.id, String = _a.name, String = _a.emp_level, Number = _a.mob, String = _a.email, Date = _a.date_of_join, _a);
-            emp_1 = fs.readFileSync("employee_data.js");
-            emp_1 = JSON.parse(emp_1);
-            stringifyData = JSON.stringify(emp_1);
-            userdata = fs.writeFileSync("employee_data.js", stringifyData);
-            findExist = userdata.find(function (user) { return user.id === emp_1.id; });
-            if (findExist) {
-                return [2 /*return*/, res.send({
-                        error: true,
-                        msg: 'username already exist'
-                    })];
-            }
-            emp_1.push(req.body);
-            res.send("successfully added");
+            _a = req.body, id = _a.id, name_1 = _a.name, emplevel = _a.emplevel, mob = _a.mob, email = _a.email, date_of_join = _a.date_of_join;
+            emp = fs.readFileSync("employee_data.js");
+            emp = JSON.parse(emp);
+            emp.push(req.body);
+            stringifyData = JSON.stringify(emp);
+            fs.writeFileSync("employee_data.js", stringifyData);
+            // console.log(data);
+            //res.send("successfully added");
+            res.send({
+                message: "Added successfully"
+            });
         }
         catch (err) {
             res.send({
-                message: "data can not be added",
-                response: err
+                message: "Error.",
+                response: null
             });
         }
         return [2 /*return*/];
@@ -82,12 +78,15 @@ router.get('/all', function (req, res) { return __awaiter(void 0, void 0, void 0
             emp = JSON.parse(emp);
             // res.send("Employees Details");
             //res.json(emp)
-            res.send(emp);
+            res.send({
+                message: "All Employee Info",
+                response: emp
+            });
         }
         catch (err) {
             res.send({
-                message: "Sorry data is not found",
-                response: err
+                message: "Error.",
+                response: null
             });
         }
         return [2 /*return*/];
@@ -105,15 +104,16 @@ router.get('/find/:id', function (req, res) { return __awaiter(void 0, void 0, v
                 emp = fs.readFileSync("employee_data.js");
                 emp = JSON.parse(emp);
                 employee = emp.filter(function (e) { return e.id == Id_1; });
-                res.json({
+                res.send({
+                    message: "founded.",
                     response: employee
                 });
                 return [3 /*break*/, 3];
             case 2:
                 err_1 = _a.sent();
                 res.send({
-                    message: "No data found",
-                    response: err_1
+                    message: "Error.",
+                    response: null
                 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
@@ -137,15 +137,15 @@ router["delete"]('/delete/:id', function (req, res) { return __awaiter(void 0, v
                 stringifyData = JSON.stringify(filtered);
                 fs.writeFileSync("employee_data.js", stringifyData);
                 res.send({
-                    message: "Deleted Successfully",
+                    message: "deleted successfully",
                     response: filtered
                 });
                 return [3 /*break*/, 3];
             case 2:
                 err_2 = _a.sent();
                 res.send({
-                    message: "can not be deleted",
-                    response: err_2
+                    message: "Error.",
+                    response: null
                 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
@@ -179,8 +179,8 @@ router.patch('/update/:id', function (req, res) { return __awaiter(void 0, void 
                 err_3 = _a.sent();
                 // console.log(err)
                 res.send({
-                    message: "can not be updated",
-                    response: err_3
+                    message: "Error.",
+                    response: null
                 });
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
